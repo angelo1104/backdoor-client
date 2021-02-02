@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/backdoor-client.iml" filepath="$PROJECT_DIR$/.idea/backdoor-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../backdoor-server/.idea/backdoor-server.iml" filepath="$PROJECT_DIR$/../backdoor-server/.idea/backdoor-server.iml" />
     </modules>
   </component>
 </project>
