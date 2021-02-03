@@ -1,0 +1,5 @@
+type ChineseMithai{
+    butter: String,
+    sugar: String,
+    chowmein: String
+}
