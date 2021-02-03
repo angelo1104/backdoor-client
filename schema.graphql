@@ -1,1 +1,9 @@
-type
+type User {
+    email: String!
+    avatar: String!
+    friends: [User!]!
+}
+
+type Query {
+    me: User!
+}
